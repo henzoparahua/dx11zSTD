@@ -33,3 +33,8 @@ private:
 	ApplicationClass* m_Application;
 };
 
+static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
+
+static SystemClass* ApplicationHandle = 0;
+
+#endif
