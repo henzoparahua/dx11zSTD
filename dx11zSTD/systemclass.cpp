@@ -79,7 +79,9 @@ void SystemClass::Run()
 		{
 			result = Frame();
 			if (!result)
+			{
 				done = true;
+			}
 		}
 	}
 
@@ -91,13 +93,15 @@ bool SystemClass::Frame()
 	bool result;
 
 	if (m_Input->IsKeyDown(VK_ESCAPE))
+	{
 		return false;
-	
+	}
 	result = m_Application->Frame();
 	
 	if (!result)
+	{
 		return false;
-	
+	}
 	return true;
 }
 
