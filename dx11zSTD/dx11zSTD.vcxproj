@@ -24,6 +24,7 @@
     <ClCompile Include="systemclass.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="applicationclass.h" />
     <ClInclude Include="inputclass.h" />
     <ClInclude Include="systemclass.h" />
   </ItemGroup>
