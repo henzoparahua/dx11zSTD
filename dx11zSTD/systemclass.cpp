@@ -32,8 +32,10 @@ bool SystemClass::Initialize()
 	m_Application = new ApplicationClass;
 
 	result = m_Application->Initialize(screenWidth, screenHeight, m_hwnd);
-	if (!result) 
+	if (!result)
+	{
 		return false;
+	}
 
 	return true;
 }
@@ -96,6 +98,7 @@ bool SystemClass::Frame()
 	{
 		return false;
 	}
+
 	result = m_Application->Frame();
 	
 	if (!result)
@@ -192,7 +195,9 @@ void SystemClass::ShutdownWindows()
 {
 	ShowCursor(true);
 	if (FULL_SCREEN)
+	{
 		ChangeDisplaySettings(NULL, 0);
+	}
 
 	DestroyWindow(m_hwnd);
 	m_hwnd = NULL;

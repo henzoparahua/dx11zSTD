@@ -27,7 +27,7 @@ void InputClass::Initialize()
 
 void InputClass::KeyDown(unsigned int input)
 {
-	m_keys[input] = false;
+	m_keys[input] = true;
 	return;
 }
 
