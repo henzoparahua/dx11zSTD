@@ -183,3 +183,18 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 
 	return;
 }
+
+void SystemClass::ShutdownWindows()
+{
+	ShowCursor(true);
+	if (FULL_SCREEN)
+		ChangeDisplaySettings(NULL, 0);
+
+	DestroyWindow(m_hwnd);
+	m_hwnd = NULL;
+	UnregisterClass(m_applicationName, m_hinstance);
+	m_hinstance = NULL;
+	ApplicationHandle = NULL;
+
+	return;
+}
