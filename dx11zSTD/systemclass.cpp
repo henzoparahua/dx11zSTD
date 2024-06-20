@@ -117,6 +117,7 @@ bool SystemClass::Frame()
             dmScreenSettings.dmBitsPerPel = 32;
             dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
+
             LONG result = ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
 
             if (result == DISP_CHANGE_SUCCESSFUL)
