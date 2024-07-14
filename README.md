@@ -1,4 +1,6 @@
-> ALL OF THAT IS FROM RASTERTEK, IM LEARNING FROM HIM !!!! 
+> ALL OF THIS CAME FROM RASTERTEK. HIS TUTORIALS ARE INSANE, GO CHECK IT OUT.
+> https://rastertek.com/
+
 
 ```mermaid
 flowchart
@@ -23,7 +25,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 //  Initialize and run the system object.
 	result = System->Initialize();
-	result ? System->Run();
+	if (result)
+	{
+		System->Run();
+	}
 
 //  Shutdown and release the system object.
 	System->Shutdown();
@@ -55,26 +60,25 @@ It reduces the size of the Win32 header files by excluding some of the less used
 // windows.h is included so we can call the funcstions to create/destroy windows and
 // be able to use the other useful Win32 functions.
 
-class SystemClass 
+class SystemClass
 {
 public:
 	SystemClass();
 	SystemClass(const SystemClass&);
 	~SystemClass();
 
-	void Initialize();
+	bool Initialize();
 	void Shutdown();
 	void Run();
 
 	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
-
 private:
 	bool Frame();
 	void InitializeWindows(int&, int&);
 	void ShutdownWindows();
 
 	LPCWSTR m_applicationName;
-	HINSTANCE m_hInstance;
+	HINSTANCE m_hinstance;
 	HWND m_hwnd;
 
 	InputClass* m_Input;
@@ -115,10 +119,12 @@ SystemClass::SystemClass()
 
 SystemClass::SystemClass(const SystemClass& other)
 {
+
 }
 
 SystemClass::~SystemClass()
 {
+
 }
 ```
 
@@ -136,19 +142,18 @@ bool SystemClass::Initialize()
 	screenHeight = 0;
 
 	InitializeWindows(screenWidth, screenHeight);
-
-//  Create and initialize the input object. This object will be 
-//  used to handle reading the keyboard input from the user.
+	
+	m_Input = new InputClass;
 	m_Input->Initialize();
 
-//  Create and initialize the application class object. This object will 
-//  handle rendering all the graphics for this application.
 	m_Application = new ApplicationClass;
 
 	result = m_Application->Initialize(screenWidth, screenHeight, m_hwnd);
-	
-	(!result) ? return false;
-	
+	if (!result)
+	{
+		return false;
+	}
+
 	return true;
 }
 ```
@@ -174,9 +179,8 @@ void SystemClass::Shutdown()
 		delete m_Input;
 		m_Input = 0;
 	}
-	
 	ShutdownWindows();
-
+	
 	return;
 }
 ```
@@ -194,18 +198,19 @@ void SystemClass::Run()
 //  Initialize the message structure.
 	ZeroMemory(&msg, sizeof(MSG));
 
+
 //  Loop until there is a quit message from the window or the user.
 	done = false;
-	while(!done)
+	while (!done)
 	{
 //  Handle the windows messages.
-		if(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+		if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
 		{
 			TranslateMessage(&msg);
 			DispatchMessage(&msg);
 		}
 //  If windows signals to end the application then exit out.
-		if(msg.message == WM_QUIT)
+		if (msg.message == WM_QUIT)
 		{
 			done = true;
 		}
@@ -213,7 +218,7 @@ void SystemClass::Run()
 		{
 //  Otherwise do the frame processing.
 			result = Frame();
-			if(!result)
+			if (!result)
 			{
 				done = true;
 			}
@@ -234,11 +239,17 @@ bool SystemClass::Frame()
 	bool result;
 
 //  Check if the user pressed escape and wants to exit the application.
-	(m_Input->IsKeyDown(VK_ESCAPE)) ? return false;
+	if (m_Input->IsKeyDown(VK_ESCAPE))
+	{
+		return false;
+	}
 
 //  Do the frame processing for the application class object.
 	result = m_Application->Frame();
-	(!result) ? return false;
+	if (!result)
+	{
+		return false;
+	}
 	
 	return true;
 }
@@ -278,7 +289,7 @@ The InitializeWindows function is where we put the code to build the window we w
 //  SystemClass.cpp
 void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 {
-	WNDCLASSSEX wc;
+	WNDCLASSEX wc;
 	DEVMODE dmScreenSettings;
 	int posX, posY;
 
@@ -286,17 +297,17 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	ApplicationHandle = this;
 
 //  Get the instance of this application.
-	m_hInstance = GetModuleHandle(NULL);
+	m_hinstance = GetModuleHandle(NULL);
 
 //  Give the application a name.
-	m_applicationName = L"Engine";
+	m_applicationName = L"Henzoparahua dx11zSTD";
 
 //  Setup the windows class with default settings.
 	wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
 	wc.lpfnWndProc = WndProc;
 	wc.cbClsExtra = 0;
 	wc.cbWndExtra = 0;
-	wc.hInstance = m_hInstance;
+	wc.hInstance = m_hinstance;
 	wc.hIcon = LoadIcon(NULL, IDI_WINLOGO);
 	wc.hIconSm = wc.hIcon;
 	wc.hCursor = LoadCursor(NULL, IDC_ARROW);
@@ -318,12 +329,12 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 		memset(&dmScreenSettings, 0, sizeof(dmScreenSettings));
 		dmScreenSettings.dmSize = sizeof(dmScreenSettings);
 		dmScreenSettings.dmPelsWidth = (unsigned long)screenWidth;
-		dmScreenSettings.dmPelsHeight = (unsigned long)screenHeight;
+		dmScreenSettings.dmPelsHeight = (unsigned long)screenHeight; 
 		dmScreenSettings.dmBitsPerPel = 32;
-		dm_ScreenSettings.dmFields = DM_BITSPERPEL | DM_PERSWIDTH | DM_PELSHEIGHT;
+		dmScreenSettings.dmFields = DM_BITSPERPEL | DM_PELSWIDTH | DM_PELSHEIGHT;
 
 //  Change the display settings to full screen.
-		ChangeDisplaySettings(&¨dmScreenSettings, CDS_FULLSCREEN);
+		ChangeDisplaySettings(&dmScreenSettings, CDS_FULLSCREEN);
 
 //  Set the position of the window to the top left corner.
 		posX = posY = 0;
@@ -331,8 +342,8 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	else
 	{
 //  If windowed then set it to this resolution.
-		screenWidth = 800;
-		screenHeight = 600;
+		screenWidth = 1278;
+		screenHeight = 720;
 
 //  Place the window in the middle of the screen.
 		posX = (GetSystemMetrics(SM_CXSCREEN) - screenWidth) / 2;
@@ -340,7 +351,9 @@ void SystemClass::InitializeWindows(int& screenWidth, int& screenHeight)
 	}
 	
 //  Create the window with the screen settings and get the handle to it.
-	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName, WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP, posX, posY, screenWidth, screenHeight, NULL, NULL, m_hInstance, NULL);
+	m_hwnd = CreateWindowEx(WS_EX_APPWINDOW, m_applicationName, m_applicationName,
+		WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_POPUP,
+		posX, posY, screenWidth, screenHeight, NULL, NULL, m_hinstance, NULL);
 
 //  Bring the window up on the screen and set it as main focus.
 	ShowWindow(m_hwnd, SW_SHOW);
@@ -366,15 +379,18 @@ void SystemClass::ShutdownWindows()
 
 //  Fix the display settings if leaving full screen mode.
 
-	(FULL_SCREEN) ? ChangeDisplaySettings(NULL, 0);
+	if (FULL_SCREEN)
+	{
+		ChangeDisplaySettings(NULL, 0);
+	}
 
 //  Remove the window.
 	DestroyWindow(m_hwnd);
 	m_hwnd = NULL;
 
 //  Remove the application instance.
-	UnregisterClass(m_applicationName, m_hInstance);
-	m_hInstance = NULL;
+	UnregisterClass(m_applicationName, m_hinstance);
+	m_hinstance = NULL;
 
 //  Release the pointer to this class.
 	ApplicationHandle = NULL;
@@ -449,23 +465,27 @@ private:
 
 InputClass::InputClass()
 {
+
 }
 
 InputClass::InputClass(const InputClass& other)
 {
+
 }
 
 InputClass::~InputClass()
 {
+
 }
+
 
 void InputClass::Initialize()
 {
 	int i;
 
 //  Initialize all the keys for being released and not pressed.
-	for(i = 0; i < 256; i++)
-	{ 
+	for (i = 0; i < 256; i++)
+	{
 		m_keys[i] = false;
 	}
 	return;
@@ -525,18 +545,21 @@ private:
 
 ### `ApplicationClass.cpp`
 ```cpp
-#include "ApplicationClass.h"
+#include "applicationclass.h"
 
 ApplicationClass::ApplicationClass()
 {
+
 }
 
 ApplicationClass::ApplicationClass(const ApplicationClass& other)
 {
+
 }
 
 ApplicationClass::~ApplicationClass()
 {
+
 }
 
 bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
@@ -549,7 +572,6 @@ void ApplicationClass::Shutdown()
 	return;
 }
 
-
 bool ApplicationClass::Frame()
 {
 	return true;
@@ -560,4 +582,3 @@ bool ApplicationClass::Render()
 	return true;
 }
 ```
-
