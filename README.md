@@ -548,7 +548,6 @@ private:
 ### `ApplicationClass.cpp`
 ```cpp
 // ApplicationClass.cpp
-
 #include "applicationclass.h"
 
 ApplicationClass::ApplicationClass()
