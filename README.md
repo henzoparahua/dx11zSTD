@@ -515,7 +515,7 @@ bool InputClass::IsKeyDown(unsigned int key)
 
 The application class is the other object that is created by the system class. All the graphics functionality in this application will be encapsulated in this class. I will also use the header in this filee for all graphics related global settings that we may want to change such as full screen or windowed mode.
 ```cpp
-# ApplicationClass.h
+// ApplicationClass.h
 
 #ifndef _APPLICATIONCLASS_H_
 #define _APPLICATIONCLASS_H_
@@ -547,7 +547,7 @@ private:
 
 ### `ApplicationClass.cpp`
 ```cpp
-# ApplicationClass.cpp
+// ApplicationClass.cpp
 
 #include "applicationclass.h"
 
