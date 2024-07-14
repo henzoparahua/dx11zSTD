@@ -433,7 +433,6 @@ To keep it simple, we used the windows input for the time being untill we do a t
 
 ```cpp
 // InputClass.h
-
 #ifndef _INPUTCLASS_H_
 #define _INPUTCLASS_H_
 
@@ -516,7 +515,6 @@ bool InputClass::IsKeyDown(unsigned int key)
 The application class is the other object that is created by the system class. All the graphics functionality in this application will be encapsulated in this class. I will also use the header in this filee for all graphics related global settings that we may want to change such as full screen or windowed mode.
 ```cpp
 // ApplicationClass.h
-
 #ifndef _APPLICATIONCLASS_H_
 #define _APPLICATIONCLASS_H_
 
