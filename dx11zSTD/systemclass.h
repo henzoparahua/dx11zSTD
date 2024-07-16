@@ -11,33 +11,27 @@
 class SystemClass
 {
 public:
-    SystemClass();
-    SystemClass(const SystemClass&);
-    ~SystemClass();
+	SystemClass();
+	SystemClass(const SystemClass&);
+	~SystemClass();
 
-    bool Initialize();
-    void Shutdown();
-    void Run();
+	bool Initialize();
+	void Shutdown();
+	void Run();
 
-    LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
-
+	LRESULT CALLBACK MessageHandler(HWND, UINT, WPARAM, LPARAM);
 private:
-    bool Frame();
-    void InitializeWindows();
-    void ShutdownWindows();
+	bool Frame();
+	void InitializeWindows(int&, int&);
+	void ShutdownWindows();
 
-    LPCWSTR m_applicationName;
-    HINSTANCE m_hinstance;
-    HWND m_hwnd;
+	LPCWSTR m_applicationName;
+	HINSTANCE m_hinstance;
+	HWND m_hwnd;
 
-    InputClass* m_Input;
-    ApplicationClass* m_Application;
-
-    int screenWidth;
-    int screenHeight;
-    bool FULL_SCREEN;
+	InputClass* m_Input;
+	ApplicationClass* m_Application;
 };
-
 
 static LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 
