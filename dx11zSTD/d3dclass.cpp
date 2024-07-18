@@ -44,4 +44,43 @@ bool D3DClass::Initialize(int screenWidth, int screenHeight, bool vsync, HWND hw
 	float fieldOfView, screenAspect;
 
 	m_vsync_enabled = vsync;
+
+	result = CreateDXGIFactory(__uuidof(IDXGIFactory), (void**)&factory);
+	if(FAILED(result))
+	{
+		return false;
+	}
+
+	result = factory->EnumAdapters(0, &adapter);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	result = adapter->EnumOutputs(0, &adapterOutput);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED,
+		&numModes, NULL);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
+	displayModeList = new DXGI_MODE_DESC[numModes];
+	if (!displayModeList)
+	{
+		return false;
+	}
+
+	result = adapterOutput->GetDisplayModeList(DXGI_FORMAT_R8G8B8A8_UNORM, DXGI_ENUM_MODES_INTERLACED,
+		&numModes, displayModeList);
+	if (FAILED(result))
+	{
+		return false;
+	}
+
 }
