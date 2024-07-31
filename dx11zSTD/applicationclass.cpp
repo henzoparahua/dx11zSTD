@@ -12,7 +12,7 @@ ApplicationClass::ApplicationClass(const ApplicationClass& other)
 
 ApplicationClass::~ApplicationClass()
 {
-
+	
 }
 
 bool ApplicationClass::Initialize(int screenWidth, int screenHeight, HWND hwnd)
